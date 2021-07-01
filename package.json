@@ -1,0 +1,26 @@
+{
+  "name": "dudely-noted",
+  "version": "1.0.0",
+  "description": "note taker app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EvMad/dudely-noted.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EvMad/dudely-noted/issues"
+  },
+  "homepage": "https://github.com/EvMad/dudely-noted#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "util": "^0.12.4"
+  },
+  "devDependencies": {}
+}
