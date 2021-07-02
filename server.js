@@ -8,28 +8,31 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-const readFileAsync = util.promisify(fs.readFile);
-const writeFileAsync = util.promisify(fs.writeFile);
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
+
+
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
 
 
 
 const noteData = require("./db/db.json");
 
-app.get('/index', (req,res) => {
-    res.sendFile(path.join(__dirname,'./public/index.html'));
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname,"./public/index.html"));
 });
 
 app.get('/notes', (req,res) => {
-    res.sendFile(path.join(__dirname,'./public/notes.html'));
+    res.sendFile(path.join(__dirname,"./public/notes.html"));
 });
 
 // app.use( (req,res) => {
 //     res.sendFile(path.join(__dirname,'./public/index.html'));
 // });
+
 
 app.get('/api/notes/', (req,res) => {
     readFileAsync('./db/db.json', 'utf8').then(data => {
@@ -42,7 +45,7 @@ app.get('/api/notes/', (req,res) => {
 
 app.post('/api/notes', (req,res) => {
     const {title, text} = req.body;
-    const newNote = {title, text};
+    console.log({title,text});    const newNote = {title, text};
     noteData.push(newNote);
     res.json(noteData);
     writeFileAsync('./db/db.json', JSON.stringify(noteData), function (err) {
@@ -50,6 +53,29 @@ app.post('/api/notes', (req,res) => {
     });
 
 });
+
+// app.get('/api/notes/', (req,res) => {
+//     fs.readFileAsync(path.join(__dirname,'./db/db.json', (err,data) => {
+//         if (err) throw err;
+//         req.json(JSON.parse(data));
+//     })
+// )});
+
+
+// app.post('/api/notes/', (req,res) => {
+//     let newNote = req.body;
+//     fs.readFileAsync('.db/db.json',(err,data) => {
+//         if (err) throw err;
+//         let notes = JSON.parse(data);
+//         noteData.push(newNote);
+//         res.json(noteData);
+//         fs.writeFileAsync('./db/db.json', JSON.stringify(noteData),(err) => err? console.err(err) :console.log('note added!') 
+           
+//         );
+//     })
+
+//     res.end();
+// });
 
 
 
