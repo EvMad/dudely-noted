@@ -116,7 +116,7 @@ const handleRenderSaveBtn = () => {
   }
 };
 
-// notes: /notes
+// notes: /notesgit
 // notes.html: /notes.html
 // Render the list of note titles
 const renderNoteList = async (notes) => {
