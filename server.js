@@ -8,12 +8,14 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const readFileAsync = util.promisify(fs.readFile);
-const writeFileAsync = util.promisify(fs.writeFile);
+
 
 const noteData = require("./db/db.json");
 
@@ -25,18 +27,31 @@ app.get('/notes', (req,res) => {
     res.sendFile(path.join(__dirname,'./public/notes.html'));
 });
 
-app.use( (req,res) => {
-    res.sendFile(path.join(__dirname,'./public/index.html'));
+// app.use( (req,res) => {
+//     res.sendFile(path.join(__dirname,'./public/index.html'));
+// });
+
+app.get('/api/notes/', (req,res) => {
+    readFileAsync('./db/db.json', 'utf8').then(data => {
+        const parsedData = JSON.parse(data);
+        res.json(parsedData);
+        res.end();
+    });
 });
 
-app.get('api/notes', (req,res) => {
-    const { title, text } = req.body;
-    const newNote = {title, text};
-    notesData.push(newNote);
-    res.json(notesData);
-    writeFileAsync('./db/db.json', JSON.stringify(notesData), function (err) {res.end();});
 
-})
+app.post('/api/notes', (req,res) => {
+    const {title, text} = req.body;
+    const newNote = {title, text};
+    noteData.push(newNote);
+    res.json(noteData);
+    writeFileAsync('./db/db.json', JSON.stringify(noteData), function (err) {
+        res.end();
+    });
+
+});
+
+
 
 
 
